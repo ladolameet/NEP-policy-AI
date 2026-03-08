@@ -1,89 +1,117 @@
-# GitaVanni - Bhagavad Gita Intelligent RAG
+# 🎓 NEP.AI – Smart Learning Assistant
 
-GitaVanni is an AI-powered spiritual guide application that uses a Hybrid Retrieval-Augmented Generation (RAG) system to answer questions and provide insights based on the Bhagavad Gita. It combines deterministic exact verse retrieval with semantic search to provide highly accurate and spiritually context-aware answers.
+NEP.AI is an intelligent AI-powered learning assistant designed to help users understand the **National Education Policy (NEP) 2020**.
+It provides quick explanations, structured answers, and educational insights through a simple chat interface.
 
-## 🌟 Features
+The goal of this project is to make **education policies easier to understand using AI** and create an accessible platform for students, educators, and researchers.
 
-*   **Hybrid Search System:** Utilizes both FAISS (dense vector search) and BM25 (sparse keyword search) for optimal context retrieval.
-*   **Deterministic Verse Retrieval:** If a user asks for a specific verse (e.g., "Chapter 2 Verse 47"), the system accurately fetches the exact Sanskrit verse directly from the source text before augmenting it with LLM insights.
-*   **Beautiful UI (GitaVanni 3.0):** A responsive, spiritually-themed web interface with chat history, animations, and a seamless chat experience.
-*   **Fast Inference:** Powered by Groq (`llama-3.3-70b-versatile`) for lightning-fast and intelligent responses.
-*   **Dual-Source Knowledge Base:** Reads from both an English translation PDF (`gita_english.pdf`) and a structured Sanskrit text file (`bhagwatgita.txt`).
+---
 
-## 🛠️ Tech Stack
+# 📌 Features
 
-*   **Backend:** FastAPI, Python
-*   **RAG Pipeline:** LangChain
-*   **Vector Store:** FAISS
-*   **Keyword Search:** BM25Retriever
-*   **Embeddings:** HuggingFace (`all-MiniLM-L6-v2`)
-*   **LLM Engine:** ChatGroq (`llama-3.3-70b-versatile`)
-*   **Frontend:** Vanilla HTML, CSS, JavaScript (`index.html`)
+### 💬 AI Chat Interface
 
-## 📁 Project Structure
+* Ask questions about **NEP 2020**
+* Get clear explanations from the AI assistant
+* Interactive chat-based learning
 
-```
-VANNI/
-├── app.py                  # Main FastAPI application and RAG backend
-├── index.html              # Frontend UI portal
-├── .env                    # Environment variables (API keys)
-├── gita_english.pdf        # Knowledge base source (English meaning)
-├── bhagwatgita.txt         # Knowledge base source (Sanskrit verses)
-├── faiss_index/            # Persisted local FAISS vector store
-├── requirements.txt        # Python dependencies (create if not present)
-└── README.md               # Project documentation
-```
+### 📚 Quick Questions
 
-## 🚀 Getting Started
+Pre-built questions to help users start quickly:
 
-### Prerequisites
+* Objectives of NEP 2020
+* Digital learning initiatives
+* Education structure (5+3+3+4)
+* Vocational education
+* Higher education reforms
 
-*   Python 3.8 or higher
-*   A Groq API Key
+### 📱 Fully Responsive
 
-### Installation
+* Works smoothly on **desktop, tablet, and mobile**
+* Optimized mobile UI
 
-1.  **Clone the repository / navigate to the folder:**
-    ```bash
-    cd <path-to-VANNI-folder>
-    ```
+### ⚡ Lightweight Architecture
 
-2.  **Create and activate a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    # Windows
-    venv\Scripts\activate
-    # macOS/Linux
-    source venv/bin/activate
-    ```
+* Fast frontend
+* Minimal dependencies
+* Simple API communication
 
-3.  **Install dependencies:**
-    You will need the following key libraries installed:
-    ```bash
-    pip install fastapi uvicorn langchain langchain-community langchain-huggingface langchain-groq pydantic faiss-cpu rank_bm25 pypdf sentence-transformers
-    ```
+### 🎨 Modern UI
 
-4.  **Set up Environment Variables:**
-    Edit the `.env` file in the root directory and add your Groq API key:
-    ```env
-    GROQ_API_KEY=your_groq_api_key_here
-    ```
+* Clean interface
+* Glassmorphism inspired design
+* Smooth animations
 
-### Running the Application
+---
 
-Start the FastAPI server using Uvicorn:
+# 🧠 How It Works
 
-```bash
-uvicorn app:app --reload
-```
+1. User asks a question in the chat interface.
+2. The frontend sends the question to the backend API.
+3. The backend processes the query using AI.
+4. The AI generates a response related to **NEP 2020 policies**.
+5. The response is displayed in the chat interface.
 
-The application will start on `http://127.0.0.1:8000`.
-Visit this URL in your web browser to open the GitaVanni 3.0 UI and start chatting!
+---
 
-## 🧠 How it Works
 
-1.  **Initialization:** On the first run, the app loads `gita_english.pdf` and parses `bhagwatgita.txt` into chunks and document objects.
-2.  **Indexing:** It then embeds these documents using HuggingFace sentence transformers, saves them locally to `faiss_index/`, and initializes a BM25 retriever. Subsequent runs load the index instantly from disk.
-3.  **Querying:** User queries are analyzed to see if they reference a specific verse (e.g., "3.14" or "Chapter 3 verse 14").
-    *   *If exact:* The system strictly outputs the Sanskrit Shloka from the TXT logic, its translation, and a contextual takeaway.
-    *   *If general:* The hybrid retriever grabs top-K relevant passages using FAISS+BM25 and frames a spiritual answer without hallucinating, keeping Sanskrit usage minimal.
+
+# 🛠️ Technologies Used
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* Font Awesome Icons
+* Google Fonts
+
+### Backend
+
+* Python
+* FastAPI
+* AI API Integration
+
+### Deployment
+
+* GitHub Pages (Frontend)
+* Render (Backend API)
+
+
+# 🎯 Future Improvements
+
+Planned upgrades for NEP.AI:
+
+* 🔎 Search inside NEP policy documents
+* 📊 Educational data visualization
+* 🧠 Smarter AI responses
+* 🌍 Multi-language support
+* 📚 Study resource recommendations
+* 🧑‍🎓 Personalized learning assistant
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+If you'd like to improve NEP.AI:
+
+1. Fork the repository
+2. Create a new branch
+3. Submit a Pull Request
+
+---
+
+
+# ⭐ Support
+
+If you like this project:
+
+⭐ Star the repository
+🍴 Fork the project
+📢 Share it with others
+
+---
+
+**"Education helps every person realize their true potential."**
