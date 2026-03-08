@@ -37,13 +37,15 @@
         }
 
         body {
-    display: flex;
-    min-height: 100dvh;
-    background: var(--bg-primary);
-    color: var(--text-main);
-    overflow: hidden;
-    width: 100%;
-}
+            display: flex;
+            min-height: 100dvh;
+            background: var(--bg-primary);
+            color: var(--text-main);
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -59,48 +61,41 @@
             border-radius: 10px;
         }
 
-        /* Sidebar - Mobile First */
+        /* Sidebar - Desktop First */
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 85%;
-            max-width: 320px;
-            height: 100dvh;
+            width: 330px;
             background: var(--bg-secondary);
             border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
-            z-index: 1000;
-            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-md);
+            height: 100dvh;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
             padding-top: var(--safe-area-top);
         }
 
-        .sidebar.active {
-            left: 0;
-        }
-
         .sidebar-header {
-            padding: 24px 20px;
+            padding: 30px 24px;
             border-bottom: 1px solid var(--glass-border);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 24px;
             color: #fff;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
         }
@@ -108,7 +103,7 @@
         .logo-text {
             font-family: 'DM Serif Display', serif;
             font-weight: 600;
-            font-size: 22px;
+            font-size: 24px;
             color: var(--text-main);
             letter-spacing: -0.5px;
         }
@@ -116,7 +111,7 @@
         .logo-text span {
             font-family: 'Inter', sans-serif;
             font-weight: 400;
-            font-size: 11px;
+            font-size: 12px;
             display: block;
             color: var(--accent-blue);
             margin-top: -2px;
@@ -126,7 +121,7 @@
 
         /* Quick Questions Button */
         .quick-questions-btn {
-            margin: 16px 20px;
+            margin: 20px 24px;
             padding: 14px;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             border: none;
@@ -134,14 +129,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             color: white;
             font-weight: 500;
             font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-            -webkit-tap-highlight-color: transparent;
+        }
+
+        .quick-questions-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
         }
 
         .quick-questions-btn:active {
@@ -152,35 +151,38 @@
         .quick-questions-panel {
             flex: 1;
             overflow-y: auto;
-            padding: 0 16px;
-            -webkit-overflow-scrolling: touch;
+            padding: 0 20px;
         }
 
         .panel-title {
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             color: var(--text-light);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             padding-left: 8px;
             font-weight: 600;
         }
 
         .quick-question-item {
-            padding: 16px;
-            border-radius: 14px;
+            padding: 16px 15px;
+            border-radius: 12px;
             margin-bottom: 10px;
             cursor: pointer;
             background: var(--bg-tertiary);
             border: 1px solid var(--glass-border);
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
+            transition: all 0.3s;
         }
 
-        .quick-question-item:active {
+        .quick-question-item:hover {
             background: var(--bg-secondary);
             border-color: var(--accent-blue);
             transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quick-question-item:active {
+            transform: scale(0.98);
         }
 
         .quick-question-item h4 {
@@ -199,15 +201,14 @@
         }
 
         .quick-question-item p {
-            font-size: 12px;
+            font-size: 12.2px;
             color: var(--text-muted);
-            line-height: 1.4;
         }
 
         .sidebar-footer {
-            padding: 20px;
+            padding: 24px;
             border-top: 1px solid var(--glass-border);
-            font-size: 12px;
+            font-size: 13px;
             font-family: 'DM Serif Display', serif;
             color: var(--text-muted);
             text-align: center;
@@ -222,76 +223,55 @@
             height: 100dvh;
             width: 100%;
             background: var(--bg-primary);
+            padding-bottom: var(--safe-area-bottom);
         }
 
         .main-header {
-            padding: 16px 20px;
+            padding: 20px 30px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
             z-index: 5;
-            padding-top: max(16px, var(--safe-area-top));
+            padding-top: max(20px, var(--safe-area-top));
         }
 
         .header-title h1 {
             font-family: 'DM Serif Display', serif;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
             color: var(--text-main);
         }
 
         .menu-toggle {
-            width: 40px;
-            height: 40px;
-            background: var(--bg-tertiary);
-            color: var(--text-main);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .menu-toggle:active {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .status-badge {
-            display: none;
+            display: none; /* Hidden by default on desktop */
         }
 
         /* Chat Container */
         .chat-container {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 24px;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
         }
 
         /* Welcome Screen */
         .welcome-screen {
-            max-width: 100%;
+            max-width: 700px;
             margin: auto;
             text-align: center;
             animation: fadeIn 0.5s ease-out;
-            padding: 20px 16px;
+            padding: 20px;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -300,33 +280,33 @@
         }
 
         .welcome-icon {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: rgba(37, 99, 235, 0.05);
             border: 1px solid rgba(37, 99, 235, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 36px;
+            margin: 0 auto 30px;
+            font-size: 45px;
             color: var(--accent-blue);
         }
 
         .welcome-screen h2 {
             font-family: 'DM Serif Display', serif;
-            font-size: 28px;
+            font-size: 38px;
             color: var(--text-main);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             font-weight: 500;
         }
 
         .welcome-screen p {
             color: var(--text-muted);
             margin-bottom: 30px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 300;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* Messages */
@@ -357,12 +337,12 @@
         }
 
         .message {
-            max-width: 100%;
-            padding: 16px 18px;
-            border-radius: 20px;
+            max-width: 75%;
+            padding: 20px 24px;
+            border-radius: 24px;
             position: relative;
-            line-height: 1.6;
-            font-size: 15px;
+            line-height: 1.7;
+            font-size: 16px;
             box-shadow: var(--shadow-sm);
         }
 
@@ -370,22 +350,22 @@
             background: var(--bot-bubble);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 6px;
         }
 
         .bot .message {
             background: var(--bot-bubble);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            border-bottom-left-radius: 4px;
+            border-bottom-left-radius: 6px;
         }
 
         .message-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-size: 12px;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
             font-weight: 500;
         }
 
@@ -398,7 +378,6 @@
             word-wrap: break-word;
             white-space: pre-wrap;
             font-weight: 400;
-            font-size: 14px;
         }
 
         .message-content strong {
@@ -408,26 +387,25 @@
 
         .message-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 12px;
+            gap: 12px;
+            margin-top: 14px;
         }
 
         .action-btn {
             background: var(--bg-tertiary);
             border: 1px solid var(--glass-border);
             color: var(--text-muted);
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
-            padding: 6px 12px;
-            border-radius: 16px;
+            padding: 6px 14px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .action-btn:active {
+        .action-btn:hover {
             background: var(--accent-blue);
             color: #fff;
             border-color: var(--accent-blue);
@@ -435,71 +413,70 @@
 
         /* Input Area */
         .input-area {
-            padding: 12px 16px;
+            padding: 20px 30px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--glass-border);
             position: relative;
             z-index: 5;
-            padding-bottom: max(12px, var(--safe-area-bottom));
+            padding-bottom: max(20px, var(--safe-area-bottom));
         }
 
         .input-wrapper {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
             background: var(--bg-tertiary);
             border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 6px 6px 6px 18px;
+            border-radius: 50px;
+            padding: 8px 10px 8px 25px;
             transition: all 0.3s;
             width: 100%;
         }
 
         .input-wrapper:focus-within {
             border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
             background: var(--bg-secondary);
         }
 
         .input-wrapper i.fa-graduation-cap {
             color: var(--accent-blue);
-            font-size: 16px;
-            flex-shrink: 0;
+            font-size: 18px;
         }
 
         .input-wrapper input {
             flex: 1;
-            padding: 10px 0;
+            padding: 14px 0;
             border: none;
             background: transparent;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 400;
             outline: none;
             color: var(--text-main);
-            min-width: 0;
         }
 
         .input-wrapper input::placeholder {
             color: var(--text-light);
-            font-size: 14px;
         }
 
         .send-btn {
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
             color: white;
             border: none;
-            width: 42px;
-            height: 42px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-            flex-shrink: 0;
-            -webkit-tap-highlight-color: transparent;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
         }
 
         .send-btn:active {
@@ -509,8 +486,8 @@
         /* Typing Indicator */
         .typing-indicator {
             display: flex;
-            gap: 5px;
-            padding: 16px 20px;
+            gap: 6px;
+            padding: 18px 24px;
             background: var(--bot-bubble);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
@@ -519,8 +496,8 @@
         }
 
         .typing-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--accent-blue);
             border-radius: 50%;
             animation: bounce 1.4s infinite ease-in-out both;
@@ -534,19 +511,139 @@
             40% { transform: scale(1); opacity: 1; }
         }
 
-        /* Mobile Landscape */
-        @media (orientation: landscape) and (max-height: 500px) {
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+        }
+
+        /* ========== MOBILE STYLES ========== */
+        @media (max-width: 768px) {
+            body {
+                position: relative;
+            }
+
+            /* Sidebar becomes slide-out on mobile */
             .sidebar {
-                width: 70%;
-                max-width: 280px;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 85%;
+                max-width: 320px;
+                height: 100dvh;
+                z-index: 1000;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: var(--shadow-md);
             }
-            
-            .quick-question-item {
-                padding: 12px;
+
+            .sidebar.active {
+                left: 0;
             }
-            
+
+            /* Show menu toggle on mobile */
+            .menu-toggle {
+                display: flex;
+                width: 40px;
+                height: 40px;
+                background: var(--bg-tertiary);
+                color: var(--text-main);
+                border: 1px solid var(--glass-border);
+                border-radius: 50%;
+                font-size: 18px;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .menu-toggle:active {
+                background: var(--accent-blue);
+                color: white;
+            }
+
+            /* Show overlay on mobile */
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.4);
+                z-index: 999;
+                backdrop-filter: blur(2px);
+                transition: opacity 0.3s ease;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            /* Prevent body scroll when sidebar open */
+            body.sidebar-open {
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Mobile adjustments */
+            .main-header {
+                padding: 16px 20px;
+            }
+
+            .header-title h1 {
+                font-size: 20px;
+            }
+
+            .chat-container {
+                padding: 16px;
+            }
+
             .message {
-                max-width: 85%;
+                max-width: 100%;
+                font-size: 15px;
+                padding: 16px 18px;
+            }
+
+            .input-area {
+                padding: 12px 16px;
+            }
+
+            .input-wrapper {
+                padding: 6px 6px 6px 18px;
+            }
+
+            .input-wrapper input {
+                font-size: 15px;
+                padding: 10px 0;
+            }
+
+            .send-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 16px;
+            }
+
+            .welcome-screen h2 {
+                font-size: 28px;
+            }
+
+            .welcome-screen p {
+                font-size: 16px;
+            }
+
+            .quick-question-item {
+                padding: 14px;
+            }
+
+            .quick-question-item p {
+                font-size: 12px;
+            }
+
+            .sidebar-footer {
+                padding: 20px;
+                font-size: 12px;
             }
         }
 
@@ -567,36 +664,26 @@
             }
         }
 
-        /* Overlay for sidebar */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 999;
-            backdrop-filter: blur(2px);
-            transition: opacity 0.3s ease;
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* Prevent body scroll when sidebar open */
-        body.sidebar-open {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
+        /* Landscape mode */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .sidebar {
+                width: 70%;
+                max-width: 280px;
+            }
+            
+            .quick-question-item {
+                padding: 12px;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Sidebar Overlay -->
+    <!-- Sidebar Overlay (mobile only) -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
@@ -634,7 +721,7 @@
             </div>
             <div class="quick-question-item" onclick="askQuestion('What are the vocational education initiatives in NEP 2020?')">
                 <h4><i class="fas fa-tools"></i> Skill Development</h4>
-                <p>What are the vocational education?</p>
+                <p>What are the vocational education initiatives?</p>
             </div>
             <div class="quick-question-item" onclick="askQuestion('How does NEP 2020 transform higher education?')">
                 <h4><i class="fas fa-university"></i> Higher Education</h4>
@@ -653,6 +740,7 @@
             <div class="header-title">
                 <h1>NEP.AI</h1>
             </div>
+            <!-- Menu toggle button (visible only on mobile) -->
             <button class="menu-toggle" onclick="toggleSidebar()">
                 <i class="fas fa-bars"></i>
             </button>
@@ -698,7 +786,7 @@
                 </div>
                 <h2>Welcome to NEP.AI</h2>
                 <p>Your intelligent guide to National Education Policy 2020 and modern learning</p>
-                <p style="font-size: 15px; color: var(--text-muted);">Tap menu icon or quick questions to start</p>
+                <p style="font-size: 16px; color: var(--text-muted);">Click on any quick question from the sidebar to get started!</p>
             `;
 
             chatContainer.appendChild(welcomeDiv);
@@ -712,15 +800,18 @@
             }, 300);
         }
 
-        // Toggle sidebar function
+        // Toggle sidebar function (only works on mobile)
         window.toggleSidebar = function () {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            
-            if (sidebar.classList.contains('active')) {
-                document.body.classList.add('sidebar-open');
-            } else {
-                document.body.classList.remove('sidebar-open');
+            // Only toggle if on mobile
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                if (sidebar.classList.contains('active')) {
+                    document.body.classList.add('sidebar-open');
+                } else {
+                    document.body.classList.remove('sidebar-open');
+                }
             }
         };
 
@@ -797,7 +888,7 @@
                     <div class="message-header">
                         <i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i>
                         <span>${role === 'user' ? 'You' : 'NEP.AI'}</span>
-                        <span style="margin-left: auto; font-size: 10px; opacity: 0.5;">${time}</span>
+                        <span style="margin-left: auto; font-size: 11px; opacity: 0.5;">${time}</span>
                     </div>
                     <div class="message-content">${formattedContent}</div>
                     ${actions}
@@ -903,6 +994,16 @@
             if (e.key === "Enter") sendMessage();
         });
 
+        // Handle window resize (switch between desktop and mobile modes)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                // Desktop mode - ensure sidebar is visible and overlay hidden
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+
         // Initialize app
         function initializeApp() {
             createNewChat();
@@ -922,7 +1023,7 @@
             initializeApp();
         }
 
-        // Close sidebar on swipe back
+        // Mobile swipe to close sidebar
         let touchStartX = 0;
         let touchEndX = 0;
         
@@ -937,7 +1038,7 @@
         
         function handleSwipe() {
             const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold && sidebar.classList.contains('active')) {
+            if (window.innerWidth <= 768 && touchEndX < touchStartX - swipeThreshold && sidebar.classList.contains('active')) {
                 toggleSidebar();
             }
         }
