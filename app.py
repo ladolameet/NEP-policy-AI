@@ -1,38 +1,27 @@
 import os
+import pickle
 import logging
-from typing import List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-# LangChain
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain_community.retrievers import BM25Retriever
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 
-# ---------------- CONFIG ---------------- #
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 PDF_FILES = [
     "NEP_Final_English.pdf",
     "ABSS_2025_Concept_Note.pdf"
 ]
 
-FAISS_INDEX_DIR = "faiss_index"
-
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+CACHE_FILE = "policy_docs.pkl"
 LLM_MODEL = "llama-3.3-70b-versatile"
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# ---------------- FASTAPI ---------------- #
-
-app = FastAPI(title="NEP 2020 Policy AI Assistant")
+app = FastAPI(title="NEP Policy Assistant")
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,137 +31,87 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class Query(BaseModel):
     question: str
 
-# ---------------- RAG SYSTEM ---------------- #
 
-class EducationPolicyRAG:
+class SimplePolicyRAG:
 
     def __init__(self):
-
-        self.embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
-        self.vectorstore = None
-        self.bm25 = None
+        self.documents = []
         self.llm = ChatGroq(
             model_name=LLM_MODEL,
             temperature=0
         )
 
-    # ---------------- LOAD DOCUMENTS ---------------- #
+    # -------- LOAD OR CACHE DOCUMENTS -------- #
 
     def load_documents(self):
 
-        documents = []
+        if os.path.exists(CACHE_FILE):
+            logger.info("Loading documents from cache...")
+            with open(CACHE_FILE, "rb") as f:
+                self.documents = pickle.load(f)
+            return
+
+        logger.info("Parsing PDFs for first time...")
+
+        docs = []
 
         for pdf in PDF_FILES:
 
             if not os.path.exists(pdf):
                 raise FileNotFoundError(f"{pdf} not found")
 
-            logger.info(f"Loading {pdf} ...")
-
             loader = PyPDFLoader(pdf)
-            docs = loader.load()
+            pdf_docs = loader.load()
 
-            for doc in docs:
-                doc.metadata["source"] = pdf
+            for d in pdf_docs:
+                docs.append(d.page_content)
 
-            documents.extend(docs)
+        self.documents = docs
 
-        logger.info(f"Loaded {len(documents)} documents.")
+        # Save cache
+        with open(CACHE_FILE, "wb") as f:
+            pickle.dump(self.documents, f)
 
-        return documents
+        logger.info(f"Cached {len(docs)} document pages")
 
-    # ---------------- BUILD INDEX ---------------- #
+    # -------- SIMPLE SEARCH -------- #
 
-    def build_index(self):
+    def search(self, query, k=5):
 
-        logger.info("Building FAISS index...")
+        query = query.lower()
 
-        documents = self.load_documents()
+        scored = []
 
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=150
-        )
+        for text in self.documents:
+            score = text.lower().count(query)
+            if score > 0:
+                scored.append((score, text))
 
-        split_docs = splitter.split_documents(documents)
+        scored.sort(reverse=True)
 
-        self.vectorstore = FAISS.from_documents(
-            split_docs,
-            self.embeddings
-        )
+        results = [s[1] for s in scored[:k]]
 
-        self.vectorstore.save_local(FAISS_INDEX_DIR)
+        if not results:
+            results = self.documents[:k]
 
-        self.bm25 = BM25Retriever.from_documents(split_docs)
+        return results
 
-        logger.info("Index built successfully.")
+    # -------- ASK -------- #
 
-    # ---------------- LOAD INDEX ---------------- #
+    def ask(self, question):
 
-    def load_index(self):
+        docs = self.search(question)
 
-        logger.info("Loading FAISS index...")
-
-        self.vectorstore = FAISS.load_local(
-            FAISS_INDEX_DIR,
-            self.embeddings,
-            allow_dangerous_deserialization=True
-        )
-
-        docs = list(self.vectorstore.docstore._dict.values())
-
-        self.bm25 = BM25Retriever.from_documents(docs)
-
-        logger.info("Index loaded successfully.")
-
-    # ---------------- INITIALIZE ---------------- #
-
-    def initialize(self):
-
-        if os.path.exists(FAISS_INDEX_DIR):
-            self.load_index()
-        else:
-            self.build_index()
-
-    # ---------------- HYBRID RETRIEVAL ---------------- #
-
-    def hybrid_retrieve(self, query: str, k: int = 5):
-
-        dense_docs = self.vectorstore.similarity_search(query, k=k)
-
-        self.bm25.k = k
-        sparse_docs = self.bm25.invoke(query)
-
-        combined = []
-        seen = set()
-
-        for doc in dense_docs + sparse_docs:
-            if doc.page_content not in seen:
-                combined.append(doc)
-                seen.add(doc.page_content)
-
-        return combined[:5]
-
-    # ---------------- ASK ---------------- #
-
-    def ask(self, question: str):
-
-        docs = self.hybrid_retrieve(question)
-
-        context = "\n\n".join([doc.page_content for doc in docs])
+        context = "\n\n".join(docs)
 
         template = """
-You are an expert assistant for Indian Education Policy.
+You are an AI assistant that explains India's National Education Policy (NEP 2020) and ABSS 2025.
 
-Answer questions using the NEP 2020 and ABSS 2025 documents.
-
-Guidelines:
-- Provide clear explanations.
-- If possible mention the policy concept.
-- Keep answers structured and concise.
+Answer clearly and concisely using the context.
 
 Context:
 {context}
@@ -184,7 +123,6 @@ Answer:
 """
 
         prompt = ChatPromptTemplate.from_template(template)
-
         chain = prompt | self.llm
 
         response = chain.invoke({
@@ -195,26 +133,20 @@ Answer:
         return response.content
 
 
-# ---------------- INITIALIZE ---------------- #
+rag = SimplePolicyRAG()
 
-rag = EducationPolicyRAG()
 
 @app.on_event("startup")
 def startup_event():
+    logger.info("Initializing system...")
+    rag.load_documents()
+    logger.info("System ready.")
 
-    logger.info("Initializing NEP Policy RAG...")
-
-    rag.initialize()
-
-    logger.info("System Ready.")
-
-# ---------------- ROUTES ---------------- #
 
 @app.get("/", response_class=HTMLResponse)
 def home():
 
     if os.path.exists("index.html"):
-
         with open("index.html", "r", encoding="utf-8") as f:
             return f.read()
 
@@ -228,16 +160,9 @@ def chat(query: Query):
         raise HTTPException(status_code=400, detail="Empty question")
 
     try:
-
         answer = rag.ask(query.question)
-
         return {"answer": answer}
 
     except Exception as e:
-
         logger.error(str(e))
-
-        raise HTTPException(
-            status_code=500,
-            detail="Internal Server Error"
-        )
+        raise HTTPException(status_code=500, detail="Internal Server Error")
