@@ -19,7 +19,7 @@ PDF_FILES = [
 ]
 
 CACHE_FILE = "policy_docs.pkl"
-LLM_MODEL = "llama-3.3-70b-versatile"
+LLM_MODEL = "openai/gpt-oss-120b"
 
 app = FastAPI(title="NEP Policy Assistant")
 
